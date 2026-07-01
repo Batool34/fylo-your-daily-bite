@@ -189,7 +189,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Fylo learns your habits to recommend and compare your perfect daily lunches from Jahez, HungerStation, and Keeta.",
       },
-      { property: "og:title", content: "Fylo — Your daily lunch, curated" },
+      { property: "og:title", content: "Fylo — We take care of you, so you can take care of life." },
       {
         property: "og:description",
         content:
@@ -198,6 +198,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Fylo" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Fylo — We take care of you, so you can take care of life." },
+      { name: "description", content: "Fylo is a culinary concierge that recommends and compares daily lunches from local apps based on your habits and health goals." },
+      { property: "og:description", content: "Fylo is a culinary concierge that recommends and compares daily lunches from local apps based on your habits and health goals." },
+      { name: "twitter:description", content: "Fylo is a culinary concierge that recommends and compares daily lunches from local apps based on your habits and health goals." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c21d1d45-5296-4730-b250-3300d2f13d54/id-preview-71054c95--def5a45f-2401-4bed-8ead-9fec928ac8af.lovable.app-1782907335530.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c21d1d45-5296-4730-b250-3300d2f13d54/id-preview-71054c95--def5a45f-2401-4bed-8ead-9fec928ac8af.lovable.app-1782907335530.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
