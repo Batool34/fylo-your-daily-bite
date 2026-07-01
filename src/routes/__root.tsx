@@ -14,13 +14,16 @@ import appCss from "../styles.css?url";
 import heroBg from "../assets/hero-bowls.jpg";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
+import fyloLogo from "../assets/fylo-logo.png.asset.json";
+
 function FyloLogo({ className = "" }: { className?: string }) {
   return (
-    <Link to="/" className={`flex items-center gap-2 ${className}`} aria-label="Fylo home">
-      <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary shadow-[0_0_24px_oklch(0.6_0.22_25/0.5)]">
-        <span className="text-[15px] font-semibold text-primary-foreground">f</span>
-      </span>
-      <span className="text-lg font-medium tracking-tight text-foreground">Fylo</span>
+    <Link to="/" className={`flex items-center gap-2 py-1 ${className}`} aria-label="Fylo home">
+      <img
+        src={fyloLogo.url}
+        alt="Fylo"
+        className="h-9 w-9 object-contain drop-shadow-[0_4px_16px_oklch(0.62_0.24_27/0.45)]"
+      />
     </Link>
   );
 }
