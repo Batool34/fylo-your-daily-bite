@@ -8,27 +8,136 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Globe, Instagram, Linkedin } from "lucide-react";
 
 import appCss from "../styles.css?url";
+import heroBg from "../assets/hero-bowls.jpg";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+
+function FyloLogo({ className = "" }: { className?: string }) {
+  return (
+    <Link to="/" className={`flex items-center gap-2 ${className}`} aria-label="Fylo home">
+      <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary shadow-[0_0_24px_oklch(0.6_0.22_25/0.5)]">
+        <span className="text-[15px] font-semibold text-primary-foreground">f</span>
+      </span>
+      <span className="text-lg font-medium tracking-tight text-foreground">Fylo</span>
+    </Link>
+  );
+}
+
+function Nav() {
+  const linkBase =
+    "text-sm text-white/75 transition-colors hover:text-white";
+  return (
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-50 px-6 pt-5">
+      <div className="pointer-events-auto mx-auto flex max-w-7xl items-center justify-between">
+        <FyloLogo />
+        <nav className="glass-pill hidden items-center gap-1 rounded-full px-2 py-1.5 md:flex">
+          <Link
+            to="/"
+            activeOptions={{ exact: true }}
+            className={`${linkBase} rounded-full px-4 py-1.5`}
+            activeProps={{ className: "bg-white/10 text-white" }}
+          >
+            Home
+          </Link>
+          <Link
+            to="/our-story"
+            className={`${linkBase} rounded-full px-4 py-1.5`}
+            activeProps={{ className: "bg-white/10 text-white" }}
+          >
+            Our Story
+          </Link>
+          <Link
+            to="/faq"
+            className={`${linkBase} rounded-full px-4 py-1.5`}
+            activeProps={{ className: "bg-white/10 text-white" }}
+          >
+            FAQ
+          </Link>
+        </nav>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            aria-label="Switch language"
+            className="glass-pill flex h-9 w-9 items-center justify-center rounded-full text-white/80 transition-colors hover:text-white"
+          >
+            <Globe className="h-4 w-4" />
+          </button>
+          <a
+            href="#"
+            className="glass-pill rounded-full px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/15"
+          >
+            Open App
+          </a>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="relative z-10 px-6 pb-8 pt-16">
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-white/60 md:flex-row">
+        <div className="flex items-center gap-6">
+          <span>© {new Date().getFullYear()} Fylo</span>
+          <a href="#" className="hover:text-white/90">Privacy Policy</a>
+          <a href="#" className="hover:text-white/90">Terms</a>
+        </div>
+        <div className="flex items-center gap-3">
+          <a
+            href="https://instagram.com"
+            aria-label="Instagram"
+            className="glass-pill flex h-9 w-9 items-center justify-center rounded-full text-white/75 transition-colors hover:text-secondary"
+          >
+            <Instagram className="h-4 w-4" />
+          </a>
+          <a
+            href="https://linkedin.com"
+            aria-label="LinkedIn"
+            className="glass-pill flex h-9 w-9 items-center justify-center rounded-full text-white/75 transition-colors hover:text-secondary"
+          >
+            <Linkedin className="h-4 w-4" />
+          </a>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+function BackgroundStage() {
+  return (
+    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      <img
+        src={heroBg}
+        alt=""
+        width={1920}
+        height={1280}
+        className="h-full w-full scale-105 object-cover"
+      />
+      {/* Warm cinematic gradient wash */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/30 to-background/90" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_10%,oklch(0.16_0.02_20/0.65)_75%)]" />
+      {/* Subtle color accents */}
+      <div className="absolute -top-32 -left-32 h-[520px] w-[520px] rounded-full bg-primary/20 blur-[140px]" />
+      <div className="absolute -bottom-40 -right-32 h-[520px] w-[520px] rounded-full bg-secondary/25 blur-[140px]" />
+    </div>
+  );
+}
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
-        </div>
+    <div className="flex min-h-screen items-center justify-center px-4">
+      <div className="glass-panel max-w-md rounded-3xl p-10 text-center">
+        <h1 className="text-hero text-6xl text-white">404</h1>
+        <p className="mt-3 text-sm text-white/70">This page wandered off the menu.</p>
+        <Link
+          to="/"
+          className="mt-6 inline-flex rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+        >
+          Back home
+        </Link>
       </div>
     </div>
   );
@@ -42,30 +151,20 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
-        </p>
+    <div className="flex min-h-screen items-center justify-center px-4">
+      <div className="glass-panel max-w-md rounded-3xl p-10 text-center">
+        <h1 className="text-hero text-3xl text-white">Something went wrong</h1>
+        <p className="mt-2 text-sm text-white/70">Try refreshing the page.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
           >
             Try again
           </button>
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-          >
-            Go home
-          </a>
         </div>
       </div>
     </div>
@@ -77,21 +176,31 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Fylo — We take care of you, so you can take care of life." },
+      {
+        name: "description",
+        content:
+          "Fylo learns your habits to recommend and compare your perfect daily lunches from Jahez, HungerStation, and Keeta.",
+      },
+      { property: "og:title", content: "Fylo — Your daily lunch, curated" },
+      {
+        property: "og:description",
+        content:
+          "Honest weighted-scoring filtration that matches your macros to the city's actual restaurant supply.",
+      },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Fylo" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: appCss,
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap",
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
   shellComponent: RootShell,
@@ -102,11 +211,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="min-h-screen bg-background text-foreground antialiased">
         {children}
         <Scripts />
       </body>
@@ -119,8 +228,12 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <BackgroundStage />
+      <Nav />
+      <main className="relative z-0">
+        <Outlet />
+      </main>
+      <Footer />
     </QueryClientProvider>
   );
 }
