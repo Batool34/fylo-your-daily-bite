@@ -14,13 +14,16 @@ import appCss from "../styles.css?url";
 import heroBg from "../assets/hero-bowls.jpg";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
+import fyloLogo from "../assets/fylo-logo.png.asset.json";
+
 function FyloLogo({ className = "" }: { className?: string }) {
   return (
-    <Link to="/" className={`flex items-center gap-2 ${className}`} aria-label="Fylo home">
-      <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary shadow-[0_0_24px_oklch(0.6_0.22_25/0.5)]">
-        <span className="text-[15px] font-semibold text-primary-foreground">f</span>
-      </span>
-      <span className="text-lg font-medium tracking-tight text-foreground">Fylo</span>
+    <Link to="/" className={`flex items-center gap-2 py-1 ${className}`} aria-label="Fylo home">
+      <img
+        src={fyloLogo.url}
+        alt="Fylo"
+        className="h-9 w-9 object-contain drop-shadow-[0_4px_16px_oklch(0.62_0.24_27/0.45)]"
+      />
     </Link>
   );
 }
@@ -87,14 +90,18 @@ function Footer() {
         </div>
         <div className="flex items-center gap-3">
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/tryfylo/"
+            target="_blank"
+            rel="noopener noreferrer"
             aria-label="Instagram"
             className="glass-pill flex h-9 w-9 items-center justify-center rounded-full text-white/75 transition-colors hover:text-secondary"
           >
             <Instagram className="h-4 w-4" />
           </a>
           <a
-            href="https://linkedin.com"
+            href="https://www.linkedin.com/company/tryfylo/"
+            target="_blank"
+            rel="noopener noreferrer"
             aria-label="LinkedIn"
             className="glass-pill flex h-9 w-9 items-center justify-center rounded-full text-white/75 transition-colors hover:text-secondary"
           >
@@ -108,7 +115,7 @@ function Footer() {
 
 function BackgroundStage() {
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
       <img
         src={heroBg}
         alt=""
@@ -116,12 +123,12 @@ function BackgroundStage() {
         height={1280}
         className="h-full w-full scale-105 object-cover"
       />
-      {/* Warm cinematic gradient wash */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/30 to-background/90" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_10%,oklch(0.16_0.02_20/0.65)_75%)]" />
-      {/* Subtle color accents */}
-      <div className="absolute -top-32 -left-32 h-[520px] w-[520px] rounded-full bg-primary/20 blur-[140px]" />
-      <div className="absolute -bottom-40 -right-32 h-[520px] w-[520px] rounded-full bg-secondary/25 blur-[140px]" />
+      {/* Cinematic scrim — dark at edges, image visible in the middle */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/45 via-background/15 to-background/85" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,oklch(0.14_0.02_20/0.55)_80%)]" />
+      {/* Subtle brand color accents */}
+      <div className="absolute -top-32 -left-32 h-[520px] w-[520px] rounded-full bg-primary/15 blur-[140px]" />
+      <div className="absolute -bottom-40 -right-32 h-[520px] w-[520px] rounded-full bg-secondary/15 blur-[140px]" />
     </div>
   );
 }
@@ -230,7 +237,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <BackgroundStage />
       <Nav />
-      <main className="relative z-0">
+      <main className="relative z-10">
         <Outlet />
       </main>
       <Footer />
