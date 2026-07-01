@@ -90,14 +90,18 @@ function Footer() {
         </div>
         <div className="flex items-center gap-3">
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/tryfylo/"
+            target="_blank"
+            rel="noopener noreferrer"
             aria-label="Instagram"
             className="glass-pill flex h-9 w-9 items-center justify-center rounded-full text-white/75 transition-colors hover:text-secondary"
           >
             <Instagram className="h-4 w-4" />
           </a>
           <a
-            href="https://linkedin.com"
+            href="https://www.linkedin.com/company/tryfylo/"
+            target="_blank"
+            rel="noopener noreferrer"
             aria-label="LinkedIn"
             className="glass-pill flex h-9 w-9 items-center justify-center rounded-full text-white/75 transition-colors hover:text-secondary"
           >
