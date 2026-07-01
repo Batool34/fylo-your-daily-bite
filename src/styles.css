@@ -50,12 +50,12 @@
   --popover: oklch(0.22 0.02 20);
   --popover-foreground: oklch(0.98 0.005 60);
 
-  /* Signature red */
-  --primary: oklch(0.60 0.22 25);
+  /* Signature red — from Fylo logo (#FF3B30) */
+  --primary: oklch(0.653 0.234 27);
   --primary-foreground: oklch(0.99 0 0);
 
-  /* Baby pink */
-  --secondary: oklch(0.90 0.05 15);
+  /* Baby pink — from Fylo logo */
+  --secondary: oklch(0.905 0.048 12);
   --secondary-foreground: oklch(0.20 0.02 20);
 
   --muted: oklch(0.28 0.02 20);
