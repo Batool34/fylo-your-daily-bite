@@ -115,7 +115,7 @@ function Footer() {
 
 function BackgroundStage() {
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
       <img
         src={heroBg}
         alt=""
@@ -123,12 +123,12 @@ function BackgroundStage() {
         height={1280}
         className="h-full w-full scale-105 object-cover"
       />
-      {/* Warm cinematic gradient wash */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/30 to-background/90" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_10%,oklch(0.16_0.02_20/0.65)_75%)]" />
-      {/* Subtle color accents */}
-      <div className="absolute -top-32 -left-32 h-[520px] w-[520px] rounded-full bg-primary/20 blur-[140px]" />
-      <div className="absolute -bottom-40 -right-32 h-[520px] w-[520px] rounded-full bg-secondary/25 blur-[140px]" />
+      {/* Cinematic scrim — dark at edges, image visible in the middle */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/45 via-background/15 to-background/85" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,oklch(0.14_0.02_20/0.55)_80%)]" />
+      {/* Subtle brand color accents */}
+      <div className="absolute -top-32 -left-32 h-[520px] w-[520px] rounded-full bg-primary/15 blur-[140px]" />
+      <div className="absolute -bottom-40 -right-32 h-[520px] w-[520px] rounded-full bg-secondary/15 blur-[140px]" />
     </div>
   );
 }
