@@ -237,7 +237,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <BackgroundStage />
       <Nav />
-      <main className="relative z-0">
+      <main className="relative z-10">
         <Outlet />
       </main>
       <Footer />
