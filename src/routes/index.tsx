@@ -23,9 +23,17 @@ function Index() {
   const [email, setEmail] = useState("");
   const [joined, setJoined] = useState(false);
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email) return;
+    const body = new URLSearchParams({ "form-name": "waitlist", email }).toString();
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body,
+    }).catch(() => {
+      // Netlify only accepts submissions on the deployed site; ignore local errors.
+    });
     setJoined(true);
   };
 
