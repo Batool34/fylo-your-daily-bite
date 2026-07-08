@@ -20,13 +20,19 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [joined, setJoined] = useState(false);
+
+  // Accept international format: optional +, 8–15 digits total, spaces/dashes allowed
+  const isValidPhone = (v: string) => {
+    const digits = v.replace(/[^\d]/g, "");
+    return /^\+?[\d\s\-()]{8,20}$/.test(v.trim()) && digits.length >= 8 && digits.length <= 15;
+  };
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!email) return;
-    const body = new URLSearchParams({ "form-name": "waitlist", email }).toString();
+    if (!isValidPhone(phone)) return;
+    const body = new URLSearchParams({ "form-name": "waitlist", phone }).toString();
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -36,6 +42,8 @@ function Index() {
     });
     setJoined(true);
   };
+
+  const canSubmit = isValidPhone(phone);
 
   return (
     <section className="relative flex min-h-screen items-center justify-center px-6 pt-24">
@@ -76,22 +84,26 @@ function Index() {
             method="POST"
             data-netlify="true"
             onSubmit={onSubmit}
-            className="glass-pill mt-10 flex w-full max-w-xl items-center gap-2 rounded-full p-1.5 pl-5"
+            className="mt-10 flex w-full max-w-xl items-center gap-2 rounded-full border border-white/20 bg-white/10 p-1.5 pl-5 backdrop-blur-xl backdrop-saturate-150 shadow-[0_10px_40px_-15px_oklch(0_0_0/0.5)]"
           >
             <input type="hidden" name="form-name" value="waitlist" />
             <input
-              type="email"
-              name="email"
+              type="tel"
+              name="phone"
               required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              className="flex-1 bg-transparent py-2.5 text-sm text-white placeholder:text-white/50 focus:outline-none"
-              aria-label="Email address"
+              inputMode="tel"
+              autoComplete="tel"
+              pattern="^\+?[\d\s\-()]{8,20}$"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="+966 5X XXX XXXX"
+              className="flex-1 bg-transparent py-2.5 text-sm text-white placeholder:text-white/45 focus:outline-none"
+              aria-label="Mobile phone number"
             />
             <button
               type="submit"
-              className="group inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-[0_10px_30px_-10px_oklch(0.6_0.22_25/0.7)] transition-all hover:bg-primary/90"
+              disabled={!canSubmit}
+              className="group inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-[0_10px_30px_-10px_oklch(0.6_0.22_25/0.7)] transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-primary"
             >
               Join Waitlist
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
