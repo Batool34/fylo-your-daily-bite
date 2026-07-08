@@ -17,12 +17,22 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import fyloLogo from "../assets/fylo-logo.png.asset.json";
 
 function FyloLogo({ className = "" }: { className?: string }) {
+  const handleClick = () => {
+    if (typeof window !== "undefined" && window.location.pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
   return (
-    <Link to="/" className={`flex items-center gap-2 py-1 ${className}`} aria-label="Fylo home">
+    <Link
+      to="/"
+      onClick={handleClick}
+      className={`flex items-center gap-2 py-1 transition-transform hover:scale-105 ${className}`}
+      aria-label="Fylo — back to top"
+    >
       <img
         src={fyloLogo.url}
         alt="Fylo"
-        className="h-9 w-9 object-contain drop-shadow-[0_4px_16px_oklch(0.62_0.24_27/0.45)]"
+        className="h-11 w-11 object-contain drop-shadow-[0_6px_20px_oklch(0.62_0.24_27/0.5)]"
       />
     </Link>
   );
