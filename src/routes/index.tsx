@@ -49,27 +49,47 @@ function Index() {
           daily lunches from your favorite local apps.
         </p>
 
-        <form
-          onSubmit={onSubmit}
-          className="glass-pill mt-10 flex w-full max-w-xl items-center gap-2 rounded-full p-1.5 pl-5"
-        >
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            className="flex-1 bg-transparent py-2.5 text-sm text-white placeholder:text-white/50 focus:outline-none"
-            aria-label="Email address"
-          />
-          <button
-            type="submit"
-            className="group inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-[0_10px_30px_-10px_oklch(0.6_0.22_25/0.7)] transition-all hover:bg-primary/90"
+        {joined ? (
+          <div
+            className="glass-panel mt-10 w-full max-w-xl animate-in fade-in zoom-in-95 slide-in-from-bottom-4 rounded-3xl border border-secondary/40 bg-secondary/10 px-8 py-8 text-center duration-700"
+            role="status"
+            aria-live="polite"
           >
-            {joined ? "You're in" : "Join Waitlist"}
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-          </button>
-        </form>
+            <p className="text-hero text-4xl text-white md:text-5xl">
+              You're in! <span aria-hidden>🚀</span>
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-white/80 md:text-base">
+              Welcome to Fylo. We've saved your spot. Watch your inbox for early access.
+            </p>
+          </div>
+        ) : (
+          <form
+            name="waitlist"
+            method="POST"
+            data-netlify="true"
+            onSubmit={onSubmit}
+            className="glass-pill mt-10 flex w-full max-w-xl items-center gap-2 rounded-full p-1.5 pl-5"
+          >
+            <input type="hidden" name="form-name" value="waitlist" />
+            <input
+              type="email"
+              name="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              className="flex-1 bg-transparent py-2.5 text-sm text-white placeholder:text-white/50 focus:outline-none"
+              aria-label="Email address"
+            />
+            <button
+              type="submit"
+              className="group inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-[0_10px_30px_-10px_oklch(0.6_0.22_25/0.7)] transition-all hover:bg-primary/90"
+            >
+              Join Waitlist
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+            </button>
+          </form>
+        )}
 
         <div className="mt-8 flex items-center gap-6 text-xs text-white/55">
           <span>Compares across</span>
