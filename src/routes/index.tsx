@@ -35,7 +35,6 @@ function Index() {
     e.preventDefault();
     if (!isValidPhone(phone)) return;
     const digits = phone.replace(/\D/g, "");
-    const visitor_id = getVisitorId();
     const body = new URLSearchParams({ "form-name": "waitlist", phone }).toString();
     fetch("/", {
       method: "POST",
@@ -46,12 +45,18 @@ function Index() {
     });
     trackEvent("waitlist_submit", { phone: digits });
     setJoined(true);
+  };
+
+  const onFastTrack = () => {
+    const digits = phone.replace(/\D/g, "");
+    const visitor_id = getVisitorId();
     const params = new URLSearchParams({
       phone: digits,
       visitor_id,
       utm_source: "landing",
       utm_campaign: "waitlist",
     });
+    trackEvent("fast_track_click", { phone: digits });
     window.location.href = `https://app.tryfylo.co/onboarding?${params.toString()}`;
   };
 
@@ -94,13 +99,14 @@ function Index() {
             <p className="mt-6 text-sm leading-relaxed text-white/85 md:text-base">
               Want priority access? Calibrate your personal AI meal filter right now to secure your lunch recommendations on day one.
             </p>
-            <a
-              href={`https://app.tryfylo.co/?phone=${encodeURIComponent(phone)}`}
+            <button
+              type="button"
+              onClick={onFastTrack}
               className="group mt-6 inline-flex items-center gap-1.5 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-[0_10px_30px_-10px_oklch(0.6_0.22_25/0.7)] transition-all hover:bg-primary/90"
             >
               Fast-Track My Access
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-            </a>
+            </button>
           </div>
         ) : (
           <form
