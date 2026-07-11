@@ -315,6 +315,23 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    let cancelled = false;
+    import("../lib/analytics").then(({ getVisitorId, trackPageview }) => {
+      if (cancelled) return;
+      getVisitorId();
+      trackPageview();
+    });
+    const unsub = router.subscribe("onResolved", () => {
+      import("../lib/analytics").then(({ trackPageview }) => trackPageview());
+    });
+    return () => {
+      cancelled = true;
+      unsub();
+    };
+  }, [router]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -327,3 +344,4 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
+

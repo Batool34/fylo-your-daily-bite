@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { ArrowRight } from "lucide-react";
+import { getVisitorId, trackEvent } from "@/lib/analytics";
+
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -33,6 +35,7 @@ function Index() {
     e.preventDefault();
     if (!isValidPhone(phone)) return;
     const digits = phone.replace(/\D/g, "");
+    const visitor_id = getVisitorId();
     const body = new URLSearchParams({ "form-name": "waitlist", phone }).toString();
     fetch("/", {
       method: "POST",
@@ -41,9 +44,17 @@ function Index() {
     }).catch(() => {
       // Netlify only accepts submissions on the deployed site; ignore local errors.
     });
+    trackEvent("waitlist_submit", { phone: digits });
     setJoined(true);
-    window.location.href = `https://app.tryfylo.co/onboarding?phone=${digits}&utm_source=landing`;
+    const params = new URLSearchParams({
+      phone: digits,
+      visitor_id,
+      utm_source: "landing",
+      utm_campaign: "waitlist",
+    });
+    window.location.href = `https://app.tryfylo.co/onboarding?${params.toString()}`;
   };
+
 
 
   const canSubmit = isValidPhone(phone);
