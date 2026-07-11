@@ -35,7 +35,6 @@ function Index() {
     e.preventDefault();
     if (!isValidPhone(phone)) return;
     const digits = phone.replace(/\D/g, "");
-    const visitor_id = getVisitorId();
     const body = new URLSearchParams({ "form-name": "waitlist", phone }).toString();
     fetch("/", {
       method: "POST",
@@ -46,12 +45,18 @@ function Index() {
     });
     trackEvent("waitlist_submit", { phone: digits });
     setJoined(true);
+  };
+
+  const onFastTrack = () => {
+    const digits = phone.replace(/\D/g, "");
+    const visitor_id = getVisitorId();
     const params = new URLSearchParams({
       phone: digits,
       visitor_id,
       utm_source: "landing",
       utm_campaign: "waitlist",
     });
+    trackEvent("fast_track_click", { phone: digits });
     window.location.href = `https://app.tryfylo.co/onboarding?${params.toString()}`;
   };
 
