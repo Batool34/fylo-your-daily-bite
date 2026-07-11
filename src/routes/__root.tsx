@@ -38,6 +38,77 @@ function FyloLogo({ className = "" }: { className?: string }) {
   );
 }
 
+function LanguageSwitcher() {
+  const [open, setOpen] = useState(false);
+  const [lang, setLang] = useState<"EN" | "AR">("EN");
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const saved = (typeof window !== "undefined" && localStorage.getItem("fylo-lang")) as
+      | "EN"
+      | "AR"
+      | null;
+    if (saved === "EN" || saved === "AR") {
+      setLang(saved);
+      document.documentElement.lang = saved.toLowerCase();
+      document.documentElement.dir = saved === "AR" ? "rtl" : "ltr";
+    }
+  }, []);
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
+  const choose = (next: "EN" | "AR") => {
+    setLang(next);
+    setOpen(false);
+    localStorage.setItem("fylo-lang", next);
+    document.documentElement.lang = next.toLowerCase();
+    document.documentElement.dir = next === "AR" ? "rtl" : "ltr";
+  };
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-label="Switch language"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        className="glass-pill flex h-9 items-center gap-1.5 rounded-full px-3 text-white/80 transition-colors hover:text-white"
+      >
+        <Globe className="h-4 w-4" />
+        <span className="text-xs font-medium">{lang}</span>
+      </button>
+      {open && (
+        <div
+          role="menu"
+          className="glass-panel absolute right-0 top-11 z-50 min-w-[8rem] overflow-hidden rounded-2xl border border-white/15 bg-black/60 p-1 backdrop-blur-xl"
+        >
+          {(["EN", "AR"] as const).map((opt) => (
+            <button
+              key={opt}
+              role="menuitemradio"
+              aria-checked={lang === opt}
+              onClick={() => choose(opt)}
+              className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm transition-colors hover:bg-white/10 ${
+                lang === opt ? "text-white" : "text-white/75"
+              }`}
+            >
+              <span>{opt === "EN" ? "English" : "العربية"}</span>
+              <span className="text-xs text-white/50">{opt}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Nav() {
   const linkBase =
     "text-sm text-white/75 transition-colors hover:text-white";
