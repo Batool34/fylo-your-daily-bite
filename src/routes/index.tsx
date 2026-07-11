@@ -32,6 +32,7 @@ function Index() {
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isValidPhone(phone)) return;
+    const digits = phone.replace(/\D/g, "");
     const body = new URLSearchParams({ "form-name": "waitlist", phone }).toString();
     fetch("/", {
       method: "POST",
@@ -41,7 +42,9 @@ function Index() {
       // Netlify only accepts submissions on the deployed site; ignore local errors.
     });
     setJoined(true);
+    window.location.href = `https://app.tryfylo.co/onboarding?phone=${digits}&utm_source=landing`;
   };
+
 
   const canSubmit = isValidPhone(phone);
 
