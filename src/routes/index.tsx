@@ -50,7 +50,7 @@ function Index() {
       <div className="mx-auto flex w-full max-w-4xl flex-col items-center text-center">
         <span className="glass-pill mb-8 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs uppercase tracking-[0.18em] text-white/80">
           <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
-          Now taking waitlist · Riyadh first
+          Now taking waitlist
         </span>
 
         <h1 className="text-hero text-white text-5xl md:text-7xl">
