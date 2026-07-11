@@ -141,13 +141,7 @@ function Nav() {
           </Link>
         </nav>
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            aria-label="Switch language"
-            className="glass-pill flex h-9 w-9 items-center justify-center rounded-full text-white/80 transition-colors hover:text-white"
-          >
-            <Globe className="h-4 w-4" />
-          </button>
+          <LanguageSwitcher />
           <a
             href="https://app.tryfylo.co"
             target="_blank"
