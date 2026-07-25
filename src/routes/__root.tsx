@@ -14,9 +14,9 @@ import appCss from "../styles.css?url";
 import heroBg from "../assets/hero-bowls.jpg";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
-import fyloLogo from "../assets/fylo-logo.png.asset.json";
+import pickyLogo from "../assets/picky-logo.png.asset.json";
 
-function FyloLogo({ className = "" }: { className?: string }) {
+function BrandLogo({ className = "" }: { className?: string }) {
   const handleClick = () => {
     if (typeof window !== "undefined" && window.location.pathname === "/") {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -27,12 +27,12 @@ function FyloLogo({ className = "" }: { className?: string }) {
       to="/"
       onClick={handleClick}
       className={`flex items-center gap-2 py-1 transition-transform hover:scale-105 ${className}`}
-      aria-label="Fylo — back to top"
+      aria-label="Picky — back to top"
     >
       <img
-        src={fyloLogo.url}
-        alt="Fylo"
-        className="h-11 w-11 object-contain drop-shadow-[0_6px_20px_oklch(0.62_0.24_27/0.5)]"
+        src={pickyLogo.url}
+        alt="Picky"
+        className="h-12 w-12 object-contain drop-shadow-[0_6px_20px_oklch(0.62_0.24_27/0.5)]"
       />
     </Link>
   );
@@ -115,7 +115,7 @@ function Nav() {
   return (
     <header className="pointer-events-none fixed inset-x-0 top-0 z-50 px-6 pt-5">
       <div className="pointer-events-auto mx-auto flex max-w-7xl items-center justify-between">
-        <FyloLogo />
+        <BrandLogo />
         <nav className="glass-pill hidden items-center gap-1 rounded-full px-2 py-1.5 md:flex">
           <Link
             to="/"
@@ -161,7 +161,7 @@ function Footer() {
     <footer className="relative z-10 px-6 pb-8 pt-16">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-white/60 md:flex-row">
         <div className="flex items-center gap-6">
-          <span>© {new Date().getFullYear()} Fylo</span>
+          <span>© {new Date().getFullYear()} Picky</span>
           <a href="#" className="hover:text-white/90">Privacy Policy</a>
           <a href="#" className="hover:text-white/90">Terms</a>
         </div>
@@ -260,27 +260,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Fylo — We take care of you, so you can take care of life." },
+      { title: "Picky — We take care of you, so you can take care of life." },
       {
         name: "description",
         content:
-          "Fylo learns your habits to recommend and compare your perfect daily lunches from Jahez, HungerStation, and Keeta.",
+          "Picky learns your habits to recommend and compare your perfect daily lunches from your favorite local delivery apps.",
       },
-      { property: "og:title", content: "Fylo — We take care of you, so you can take care of life." },
+      { property: "og:title", content: "Picky — Your daily lunch, curated." },
       {
         property: "og:description",
         content:
-          "Honest weighted-scoring filtration that matches your macros to the city's actual restaurant supply.",
+          "A culinary concierge that recommends and compares daily lunches from local apps based on your habits and health goals.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "Fylo" },
+      { property: "og:site_name", content: "Picky" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Fylo — We take care of you, so you can take care of life." },
-      { name: "description", content: "Fylo is a culinary concierge that recommends and compares daily lunches from local apps based on your habits and health goals." },
-      { property: "og:description", content: "Fylo is a culinary concierge that recommends and compares daily lunches from local apps based on your habits and health goals." },
-      { name: "twitter:description", content: "Fylo is a culinary concierge that recommends and compares daily lunches from local apps based on your habits and health goals." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c21d1d45-5296-4730-b250-3300d2f13d54/id-preview-71054c95--def5a45f-2401-4bed-8ead-9fec928ac8af.lovable.app-1782907335530.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c21d1d45-5296-4730-b250-3300d2f13d54/id-preview-71054c95--def5a45f-2401-4bed-8ead-9fec928ac8af.lovable.app-1782907335530.png" },
+      { name: "twitter:title", content: "Picky — Your daily lunch, curated." },
+      { name: "twitter:description", content: "Picky recommends and compares your perfect daily lunches from your favorite local delivery apps." },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
