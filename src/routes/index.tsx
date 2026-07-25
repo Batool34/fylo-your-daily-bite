@@ -1,20 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { ArrowRight } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { getVisitorId, trackEvent } from "@/lib/analytics";
-
+import { joinWaitlist } from "@/lib/waitlist.functions";
 
 export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Fylo — We take care of you, so you can take care of life." },
+      { title: "Picky — We take care of you, so you can take care of life." },
       {
         name: "description",
         content:
-          "Fylo learns your habits to recommend and compare your perfect daily lunches from Jahez, HungerStation, and Keeta.",
+          "Picky learns your habits to recommend and compare your perfect daily lunches from your favorite local delivery apps.",
       },
-      { property: "og:title", content: "Fylo — Your daily lunch, curated" },
+      { property: "og:title", content: "Picky — Your daily lunch, curated" },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],
@@ -22,29 +23,55 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const submit = useServerFn(joinWaitlist);
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [joined, setJoined] = useState(false);
+  const [alreadyOnList, setAlreadyOnList] = useState(false);
 
-  // Accept international format: optional +, 8–15 digits total, spaces/dashes allowed
+  const isValidEmail = (v: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) && v.trim().length <= 320;
+
   const isValidPhone = (v: string) => {
     const digits = v.replace(/[^\d]/g, "");
-    return /^\+?[\d\s\-()]{8,20}$/.test(v.trim()) && digits.length >= 8 && digits.length <= 15;
+    return (
+      /^\+?[\d\s\-()]{8,20}$/.test(v.trim()) &&
+      digits.length >= 8 &&
+      digits.length <= 15
+    );
   };
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const canSubmit =
+    !submitting && isValidEmail(email) && isValidPhone(phone);
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!isValidPhone(phone)) return;
-    const digits = phone.replace(/\D/g, "");
-    const body = new URLSearchParams({ "form-name": "waitlist", phone }).toString();
-    fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body,
-    }).catch(() => {
-      // Netlify only accepts submissions on the deployed site; ignore local errors.
-    });
-    trackEvent("waitlist_submit", { phone: digits });
-    setJoined(true);
+    if (!canSubmit) return;
+    setSubmitting(true);
+    setErrorMsg(null);
+    try {
+      const result = await submit({
+        data: { email: email.trim().toLowerCase(), phone: phone.trim() },
+      });
+      trackEvent("waitlist_submit", {
+        email_domain: email.split("@")[1] ?? "",
+        phone: phone.replace(/\D/g, ""),
+        duplicate: result.duplicate,
+      });
+      setAlreadyOnList(Boolean(result.duplicate));
+      setJoined(true);
+    } catch (err) {
+      console.error(err);
+      setErrorMsg(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const onFastTrack = () => {
@@ -52,6 +79,7 @@ function Index() {
     const visitor_id = getVisitorId();
     const params = new URLSearchParams({
       phone: digits,
+      email: email.trim().toLowerCase(),
       visitor_id,
       utm_source: "landing",
       utm_campaign: "waitlist",
@@ -59,10 +87,6 @@ function Index() {
     trackEvent("fast_track_click", { phone: digits });
     window.location.href = `https://app.tryfylo.co/onboarding?${params.toString()}`;
   };
-
-
-
-  const canSubmit = isValidPhone(phone);
 
   return (
     <section className="relative flex min-h-screen items-center justify-center px-6 pt-24">
@@ -80,8 +104,8 @@ function Index() {
 
         <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/75 md:text-lg">
           Supporting every version of you—healthy, unhealthy, and everything in
-          between. Fylo learns your habits to recommend and compare your perfect
-          daily lunches from your favorite local apps.
+          between. Picky learns your habits to recommend and compare your
+          perfect daily lunches from your favorite local apps.
         </p>
 
         {joined ? (
@@ -91,10 +115,16 @@ function Index() {
             aria-live="polite"
           >
             <p className="text-hero text-4xl text-white md:text-5xl">
-              You're in! <span aria-hidden>🚀</span>
+              {alreadyOnList ? (
+                <>You're already on the list 👀</>
+              ) : (
+                <>You're on the list! <span aria-hidden>👀</span></>
+              )}
             </p>
             <p className="mt-3 text-sm leading-relaxed text-white/80 md:text-base">
-              Welcome to Fylo. We've saved your spot. Watch your inbox for early access.
+              {alreadyOnList
+                ? "We've got you saved. Check your inbox for your welcome note."
+                : "Welcome to Picky. Check your inbox — your welcome email is on its way."}
             </p>
             <p className="mt-6 text-sm leading-relaxed text-white/85 md:text-base">
               Want priority access? Calibrate your personal AI meal filter right now to secure your lunch recommendations on day one.
@@ -110,34 +140,58 @@ function Index() {
           </div>
         ) : (
           <form
-            name="waitlist"
-            method="POST"
-            data-netlify="true"
             onSubmit={onSubmit}
-            className="mt-10 flex w-full max-w-xl items-center gap-2 rounded-full border border-white/20 bg-white/10 p-1.5 pl-5 backdrop-blur-xl backdrop-saturate-150 shadow-[0_10px_40px_-15px_oklch(0_0_0/0.5)]"
+            className="mt-10 flex w-full max-w-xl flex-col gap-3"
           >
-            <input type="hidden" name="form-name" value="waitlist" />
-            <input
-              type="tel"
-              name="phone"
-              required
-              inputMode="tel"
-              autoComplete="tel"
-              pattern="^\+?[\d\s\-()]{8,20}$"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="+966 5X XXX XXXX"
-              className="flex-1 bg-transparent py-2.5 text-sm text-white placeholder:text-white/45 focus:outline-none"
-              aria-label="Mobile phone number"
-            />
-            <button
-              type="submit"
-              disabled={!canSubmit}
-              className="group inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-[0_10px_30px_-10px_oklch(0.6_0.22_25/0.7)] transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-primary"
-            >
-              Join Waitlist
-              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-            </button>
+            <div className="flex flex-col gap-2 rounded-3xl border border-white/20 bg-white/10 p-2 backdrop-blur-xl backdrop-saturate-150 shadow-[0_10px_40px_-15px_oklch(0_0_0/0.5)] sm:flex-row sm:items-center sm:rounded-full sm:p-1.5 sm:pl-5">
+              <input
+                type="email"
+                name="email"
+                required
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@email.com"
+                className="flex-1 rounded-2xl bg-transparent px-3 py-2.5 text-sm text-white placeholder:text-white/45 focus:outline-none sm:rounded-none sm:px-0"
+                aria-label="Email address"
+              />
+              <span className="hidden h-5 w-px bg-white/15 sm:block" />
+              <input
+                type="tel"
+                name="phone"
+                required
+                inputMode="tel"
+                autoComplete="tel"
+                pattern="^\+?[\d\s\-()]{8,20}$"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+966 5X XXX XXXX"
+                className="flex-1 rounded-2xl bg-transparent px-3 py-2.5 text-sm text-white placeholder:text-white/45 focus:outline-none sm:rounded-none sm:px-0"
+                aria-label="Mobile phone number"
+              />
+              <button
+                type="submit"
+                disabled={!canSubmit}
+                className="group inline-flex items-center justify-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-[0_10px_30px_-10px_oklch(0.6_0.22_25/0.7)] transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-primary"
+              >
+                {submitting ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    Joining…
+                  </>
+                ) : (
+                  <>
+                    Join Waitlist
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </>
+                )}
+              </button>
+            </div>
+            {errorMsg && (
+              <p className="text-xs text-red-300" role="alert">
+                {errorMsg}
+              </p>
+            )}
           </form>
         )}
 
