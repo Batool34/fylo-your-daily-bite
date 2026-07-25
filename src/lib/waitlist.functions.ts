@@ -6,8 +6,7 @@ const signupSchema = z.object({
   phone: z.string().trim().min(6).max(32),
 });
 
-const AIRTABLE_SURVEY_URL =
-  "https://airtable.com/appe9w5tQ1qXh9bY7/shr9wayWPdkRkAJg5";
+const AIRTABLE_SURVEY_URL = "https://airtable.com/appe9w5tQ1qXh9bY7/pagMfKSyqm7bHo0CX/form";
 const FROM_NAME = "Picky";
 const FROM_EMAIL = "trypickyy@gmail.com";
 
@@ -82,11 +81,7 @@ ${AIRTABLE_SURVEY_URL}
     ``,
   ].join("\r\n");
 
-  const raw = Buffer.from(mime, "utf8")
-    .toString("base64")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
+  const raw = Buffer.from(mime, "utf8").toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 
   return { raw };
 }
@@ -98,18 +93,15 @@ async function sendWelcomeEmail(toEmail: string) {
     throw new Error("Email service is not configured");
   }
   const { raw } = buildWelcomeEmail(toEmail);
-  const res = await fetch(
-    "https://connector-gateway.lovable.dev/google_mail/gmail/v1/users/me/messages/send",
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${lovableKey}`,
-        "X-Connection-Api-Key": gmailKey,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ raw }),
+  const res = await fetch("https://connector-gateway.lovable.dev/google_mail/gmail/v1/users/me/messages/send", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${lovableKey}`,
+      "X-Connection-Api-Key": gmailKey,
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify({ raw }),
+  });
   if (!res.ok) {
     const body = await res.text();
     console.error(`Gmail send failed [${res.status}]: ${body}`);
@@ -120,9 +112,7 @@ async function sendWelcomeEmail(toEmail: string) {
 export const joinWaitlist = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => signupSchema.parse(data))
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import(
-      "@/integrations/supabase/client.server"
-    );
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     // Duplicate check
     const { data: existing, error: lookupError } = await supabaseAdmin
@@ -148,10 +138,7 @@ export const joinWaitlist = createServerFn({ method: "POST" })
 
     try {
       await sendWelcomeEmail(data.email);
-      await supabaseAdmin
-        .from("waitlist")
-        .update({ welcome_email_sent: true })
-        .eq("email", data.email);
+      await supabaseAdmin.from("waitlist").update({ welcome_email_sent: true }).eq("email", data.email);
     } catch (err) {
       console.error("Welcome email failed", err);
       // Don't fail the signup if email sending has a hiccup.
