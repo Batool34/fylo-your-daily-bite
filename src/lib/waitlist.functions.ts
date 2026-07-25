@@ -11,7 +11,7 @@ const FROM_NAME = "Picky";
 const FROM_EMAIL = "trypickyy@gmail.com";
 
 function buildWelcomeEmail(toEmail: string) {
-  const subject = "Welcome to Picky 🎉";
+  const subject = "Welcome to Picky!";
   const html = `<!doctype html>
 <html>
   <body style="margin:0;padding:0;background:#faf8f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a1a;">
@@ -22,12 +22,12 @@ function buildWelcomeEmail(toEmail: string) {
             <tr>
               <td style="background:linear-gradient(135deg,#ff3b30,#ffb6b9);padding:56px 32px;text-align:center;">
                 <div style="display:inline-block;padding:10px 20px;border-radius:999px;background:rgba(255,255,255,0.2);color:#fff;font-size:12px;letter-spacing:2px;text-transform:uppercase;">You're in</div>
-                <h1 style="margin:20px 0 0;font-size:36px;line-height:1.15;color:#fff;font-weight:700;">Welcome to Picky 🎉</h1>
+                <h1 style="margin:20px 0 0;font-size:36px;line-height:1.15;color:#fff;font-weight:700;">Welcome to Picky!</h1>
               </td>
             </tr>
             <tr>
               <td style="padding:40px 40px 8px;">
-                <p style="font-size:16px;line-height:1.6;margin:0 0 16px;">Thanks for joining the Picky waitlist. We're building the smartest way to find your perfect lunch — every day.</p>
+                <p style="font-size:16px;line-height:1.6;margin:0 0 16px;">Thanks for joining the Picky waitlist. We're building the smartest way to find your perfect lunch every day.</p>
                 <p style="font-size:16px;line-height:1.6;margin:0 0 24px;">To secure your early-access spot, help us calibrate your personal meal filter with a quick 2-minute survey:</p>
                 <div style="text-align:center;margin:28px 0 8px;">
                   <a href="${AIRTABLE_SURVEY_URL}" style="display:inline-block;background:#ff3b30;color:#ffffff;text-decoration:none;font-weight:600;font-size:15px;padding:14px 28px;border-radius:999px;box-shadow:0 10px 24px -8px rgba(255,59,48,0.55);">Take the 2-minute survey →</a>
